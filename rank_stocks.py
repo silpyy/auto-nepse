@@ -23,19 +23,17 @@ def main():
         df.loc[:, "PE vs Sector":"ROE Vs Sector"] == "Undervalued"
     ).sum(axis=1)
 
-    df = df.loc[:, ["Symbol", "Ratios Summary", "Sector", "LTP", "Undervalued"]]
-    df["Bonus"] = df["Symbol"].apply(get_bonus)
-    df["Ratios Summary"] = df["Ratios Summary"].replace(
-        {"Strong": 1, "Medium": 0, "Weak": -1}
-    )
+    df["Bonus %"] = df["Symbol"].apply(get_bonus)
+    df["Ratio"] = df["Ratios Summary"].replace({"Strong": 1, "Medium": 0, "Weak": -1})
 
     df["Symbol"] = df["Symbol"].apply(
         lambda symbol: f"[{symbol}](https://www.nepsealpha.com/stocks/{symbol}/info)"
     )
     df = df.sort_values(
-        by=["Undervalued", "Ratios Summary", "LTP", "Bonus"],
+        by=["Undervalued", "Ratio", "LTP", "Bonus %"],
         ascending=[False, False, True, False],
     )
+    df = df.loc[:, ["Symbol", "Ratios Summary", "Sector", "LTP", "Undervalued"]]
     stock_table = df.to_markdown(index=False)
     Path("README.md").write_text(stock_table)
 
