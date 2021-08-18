@@ -33,7 +33,9 @@ def main():
         by=["Undervalued", "Ratio", "LTP", "Bonus %"],
         ascending=[False, False, True, False],
     )
-    df = df.loc[:, ["Symbol", "Ratios Summary", "Sector", "LTP", "Undervalued"]]
+    df = df.loc[
+        :, ["Symbol", "Ratios Summary", "Sector", "LTP", "Undervalued", "Bonus %"]
+    ]
     stock_table = df.to_markdown(index=False)
     Path("README.md").write_text(stock_table)
 
